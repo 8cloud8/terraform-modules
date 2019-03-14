@@ -16,4 +16,3 @@ variable "dynamodb_table" {
 variable "key" {
   default = "terraform.tfstate"
 }
-

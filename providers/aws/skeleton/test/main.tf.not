@@ -1,0 +1,16 @@
+/*
+variable "region" { default = "eu-west-1" }
+variable "profile" { default = "" }
+
+provider "aws" {
+  version = ">= 2.1.0"
+  profile = "${var.profile}"
+  region  = "${var.region}"
+}
+*/
+module "test" {
+  source  = "github.com/8cloud8/terraform-modules/providers/aws/skeleton"
+ 
+#  region  = "${var.region}"
+#  profile = "${var.profile}"
+}

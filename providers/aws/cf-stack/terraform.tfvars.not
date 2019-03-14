@@ -1,0 +1,3 @@
+name="demo"
+template_body = "IAM_Users_Groups_and_Policies.template"
+parameters = { Password = "fooooo" }
