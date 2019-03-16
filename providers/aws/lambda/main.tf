@@ -1,3 +1,11 @@
+provider "aws" {
+  version = ">= 2.1.0"
+}
+
+provider "archive" {
+  version = ">= 1.1.0"
+}
+
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
@@ -58,4 +66,7 @@ resource "aws_lambda_function" "lambda" {
 
 output "qualified_arn" {
   value = "${aws_lambda_function.lambda.qualified_arn}"
+}
+terraform {
+  required_version = ">= 0.11.2"
 }

@@ -1,3 +1,13 @@
+provider "random" {
+  version = ">= 2.0.0"
+}
+
+provider "aws" {
+  version = ">= 2.1.0"
+}
+
+data "aws_region" "current" {}
+
 resource "random_pet" "bucket" {}
 
 resource "aws_s3_bucket" "remote-state" {
@@ -32,10 +42,11 @@ resource "aws_dynamodb_table" "remote-state" {
 output "tf_config" {
   value = <<EOF
 terraform {
+  required_version = ">= 0.11.2"
   backend "s3" {
     bucket         = "${aws_s3_bucket.remote-state.id}"
     key            = "${var.key}"
-    region         = "${var.region}"
+    region         = "${data.aws_region.current.name}"
     dynamodb_table = "${aws_dynamodb_table.remote-state.id}"
   }
 }
