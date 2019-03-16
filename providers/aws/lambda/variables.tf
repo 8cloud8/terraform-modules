@@ -11,10 +11,6 @@ variable "role_arn" {
   default     = ""
 }
 
-variable "role_name" {
-  description = "Name of the role. Generated name will be <role_name>-<environment>"
-}
-
 variable "handler" {
   description = "The handler to call, see http://docs.aws.amazon.com/cli/latest/reference/lambda/create-function.html for format"
 }
