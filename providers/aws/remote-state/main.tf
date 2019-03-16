@@ -32,10 +32,11 @@ resource "aws_dynamodb_table" "remote-state" {
 output "tf_config" {
   value = <<EOF
 terraform {
+  required_version = ">= ${var.std["tf_version"]}"
   backend "s3" {
     bucket         = "${aws_s3_bucket.remote-state.id}"
     key            = "${var.key}"
-    region         = "${var.region}"
+    region         = "${var.std["region"]}"
     dynamodb_table = "${aws_dynamodb_table.remote-state.id}"
   }
 }

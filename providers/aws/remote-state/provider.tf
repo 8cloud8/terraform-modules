@@ -5,6 +5,6 @@ provider "random" {
 provider "aws" {
   version = ">= 2.1.0"
 
-  profile = "${var.profile}"
-  region  = "${var.region}"
+  profile = "${var.std["profile"]}"
+  region  = "${var.std["region"]}"
 }

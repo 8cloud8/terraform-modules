@@ -4,16 +4,11 @@ variable "tags" {
   }
 }
 
-variable "environment" {
-  default = "dev"
-}
-
-variable "region" {
-  description = "AWS region"
-  default     = "eu-central-1"
-}
-
-variable "profile" {
-  description = "AWS profile"
-  default     = ""
+variable "std" {
+  default = {
+    tf_version = "0.11.10"
+    default    = "dev"
+    region     = "eu-central-1"
+    profile    = ""
+  }
 }
