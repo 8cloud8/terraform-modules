@@ -1,6 +1,6 @@
 locals {
   function_name = "demo_lambda"
-  description   = "testing lambda function"
+  description   = "Testing lambda function"
   handler       = "test_lambda.whoami_handler"
   runtime       = "python3.6"
   source_file   = "test_lambda.py"
