@@ -1,5 +1,5 @@
 module "test" {
-  source = "git::https://github.com/8cloud8/terraform-modules.git//providers/aws/skeleton?ref=v0.0.1"
+  source = "git::https://github.com/8cloud8/terraform-modules.git//providers/aws/skeleton?ref=v0.0.2"
   region = "eu-west-1"
 }
 

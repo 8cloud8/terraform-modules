@@ -1,6 +1,6 @@
 module "test" {
-  source = "git::https://github.com/8cloud8/terraform-modules.git//providers/aws/bootstrap?ref=v0.0.1"
-  bucket = "demo"
+  source = "git::https://github.com/8cloud8/terraform-modules.git//providers/aws/remote-state?ref=v0.0.2"
+  bucket = "demo.io"
 }
 
 output "terraform.tfvars" {
