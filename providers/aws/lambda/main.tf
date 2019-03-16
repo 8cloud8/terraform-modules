@@ -11,6 +11,25 @@ locals {
   region = "${data.aws_region.current.name}"
 }
 
+resource "aws_iam_role" "iam" {
+  name = "${format("%s-%sLambdaRole", var.function_name, lower(var.environment))}"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_lambda_function" "lambda" {
   function_name    = "${format("%s-%s", var.function_name, lower(var.environment))}"
   description      = "${var.description}"
@@ -20,13 +39,7 @@ resource "aws_lambda_function" "lambda" {
   runtime          = "${var.runtime}"
   publish          = "${var.publish}"
   timeout          = "${var.timeout}"
-
-  role = "${signum(length(var.role_arn)) == 1 ? 
-                                  var.role_arn : 
-                                  format("arn:aws:iam::%s:role/lambda/%s-%s",
-                                  data.aws_caller_identity.current.account_id,
-                                  var.role_name,
-                                  lower(var.environment))}"
+  role             = "${aws_iam_role.iam.arn}"
 
   environment {
     variables = "${merge(var.variables, map(
