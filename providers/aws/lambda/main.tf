@@ -1,3 +1,7 @@
+terraform {
+  required_version = ">= 0.11.2"
+}
+
 provider "aws" {
   version = ">= 2.1.0"
 }
@@ -21,6 +25,7 @@ locals {
 
 resource "aws_iam_role" "iam" {
   name = "${format("%s-%sLambdaRole", var.function_name, lower(var.environment))}"
+
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -66,7 +71,4 @@ resource "aws_lambda_function" "lambda" {
 
 output "qualified_arn" {
   value = "${aws_lambda_function.lambda.qualified_arn}"
-}
-terraform {
-  required_version = ">= 0.11.2"
 }
