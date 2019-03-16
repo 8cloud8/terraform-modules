@@ -1,5 +1,5 @@
 module "test" {
-  source = "git::https://github.com/8cloud8/terraform-modules.git//providers/aws/remote-state?ref=v0.0.2"
+  source = "git::https://github.com/8cloud8/terraform-modules.git//providers/aws/remote-state?ref=v0.0.3"
   bucket = "demo.io"
 }
 
