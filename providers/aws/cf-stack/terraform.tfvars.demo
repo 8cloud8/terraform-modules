@@ -1,0 +1,9 @@
+name = "demo"
+
+url = "https://s3.eu-west-1.amazonaws.com/cloudformation-templates-eu-west-1/IAM_Users_Groups_and_Policies.template"
+
+parameters = {
+  Password = "00fo?9Q1gkL"
+}
+
+capabilities = ["CAPABILITY_IAM"]

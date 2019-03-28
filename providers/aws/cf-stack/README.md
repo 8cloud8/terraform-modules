@@ -1,2 +1,2 @@
-# Purpose
-Integration between Terraform and CloudFormation
+# cf-stack
+Provides CloudFormation Stack resource
