@@ -1,0 +1,49 @@
+name = "MyDemoReadRole"
+description = "My demo RO role"
+
+# Should be existing account
+trust_account_ids=["111111111111"]
+
+## Optionals
+
+#enabled="true"
+#require_mfa="true"
+
+extra_tags = {
+  "sample" = "true"
+}
+
+#
+# https://alestic.com/2015/10/aws-iam-readonly-too-permissive/
+policy_arns=["arn:aws:iam::aws:policy/ReadOnlyAccess"]
+
+policy_json=<<JSON
+{
+      "Version": "2012-10-17",
+      "Statement": [
+          {
+              "Sid": "DenyData",
+              "Effect": "Deny",
+              "Action": [
+                  "cloudformation:GetTemplate",
+                  "dynamodb:GetItem",
+                  "dynamodb:BatchGetItem",
+                  "dynamodb:Query",
+                  "dynamodb:Scan",
+                  "ec2:GetConsoleOutput",
+                  "ec2:GetConsoleScreenshot",
+                  "ecr:BatchGetImage",
+                  "ecr:GetAuthorizationToken",
+                  "ecr:GetDownloadUrlForLayer",
+                  "kinesis:Get*",
+                  "lambda:GetFunction",
+                  "logs:GetLogEvents",
+                  "s3:GetObject",
+                  "sdb:Select*",
+                  "sqs:ReceiveMessage"
+              ],
+              "Resource": "*"
+          }
+      ]
+  }
+JSON
