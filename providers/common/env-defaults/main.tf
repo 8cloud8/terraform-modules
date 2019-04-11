@@ -10,7 +10,7 @@ locals {
 /*
 usage:
 module "dev-env" {
-  source      = "git::https://github.com/8cloud8/terraform-modules.git//providers/common/env-defaults?ref=v0.0.3"
+  source      = "git::https://github.com/8cloud8/terraform-modules.git//providers/common/env-defaults?ref=v0.0.4"
   environment = "dev"
   size        = "large"
 }
