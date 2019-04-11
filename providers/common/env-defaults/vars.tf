@@ -1,35 +1,41 @@
+# -- vars
 variable "enabled" {
   type        = "string"
   default     = "true"
   description = "Set to false to prevent the module from creating any resources"
 }
 
-variable "workspace_to_environment_map" {
+variable "environments_map" {
   type = "map"
 
   default = {
     dev     = "dev"
-    qa      = "qa"
+    trn     = "trn"
     staging = "staging"
     prod    = "prod"
   }
+  description = "Environment names used in setup (case sensitive)"
 }
 
-variable "environment_to_size_map" {
+variable "environments_size_map" {
   type = "map"
 
   default = {
     dev     = "small"
-    qa      = "medium"
+    trn     = "medium"
     staging = "large"
     prod    = "xlarge"
   }
 }
 
-variable "workspace_to_size_map" {
+variable "regions_map" {
   type = "map"
 
   default = {
-    dev = "small"
+    dev     = "eu-west-1"
+    trn     = "eu-west-1"
+    staging = "eu-west-1"
+    prod    = "eu-central-1"
   }
 }
+

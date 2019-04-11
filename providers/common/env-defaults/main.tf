@@ -2,18 +2,39 @@ terraform {
   required_version = ">= 0.11.2"
 }
 
+variable "env" {
+  description = "env to run"
+}
+
 locals {
-  env   = "${lookup(var.workspace_to_environment_map, terraform.workspace, "dev")}"
-  size  = "${local.env == "dev" ? lookup(var.workspace_to_size_map, terraform.workspace, "small") : var.environment_to_size_map[local.env]}"
+  default = "dev"
+  enabled = "${var.enabled == "true" ? true : false }"
+
+  env     = "${lookup(var.environments_map,      var.env, local.default)}"
+  size    = "${lookup(var.environments_size_map, var.env, local.default)}"
+  region  = "${lookup(var.regions_map,           var.env, local.default)}"
 }
 
-/*
-usage:
-module "dev-env" {
-  source      = "git::https://github.com/8cloud8/terraform-modules.git//providers/common/env-defaults?ref=v0.0.4"
-  environment = "dev"
-  size        = "large"
+resource "local_file" "grow_to_prod" {
+  count    = "${var.enabled == "true" ? 1 : 0}"
+  #content  = "env = \"${trimspace(local.env)}\""
+  content  = "env = \"prod\""
+  filename = "${local.env}.auto.tfvars"
 }
 
-your_module_size = "${module.dev-env.size}"
-*/
+##
+output "env" {
+  value = "${local.env}"
+}
+
+output "size" {
+  value = "${local.size}"
+}
+
+output "region" {
+  value = "${local.region}"
+}
+
+output "foo" {
+  value  = "${var.regions_map[local.env]}"
+}
