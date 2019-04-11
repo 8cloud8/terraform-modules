@@ -8,8 +8,8 @@ locals {
 }
 
 module "test_lambda" {
-  #source = "git::https://github.com/8cloud8/terraform-modules.git//providers/aws/lambda?ref=v0.0.3"
-  source = "../"
+  source = "git::https://github.com/8cloud8/terraform-modules.git//providers/aws/lambda-function?ref=v0.0.3"
+  #source = "../"
 
   function_name = "${local.function_name}"
   description   = "${local.description}"
