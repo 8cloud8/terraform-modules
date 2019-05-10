@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.11.2"
+  required_version = ">= 0.11.12"
 }
 
 provider "aws" {
@@ -10,41 +10,22 @@ provider "archive" {
   version = ">= 1.1.0"
 }
 
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
-
-data "archive_file" "lambda_archive" {
-  type        = "${var.type}"
-  source_file = "${var.source_file}"
-  output_path = "/tmp/${var.function_name}.${var.type}"
-}
-
 locals {
-  region = "${data.aws_region.current.name}"
-}
+  region      = "${data.aws_region.current.name}"
+  account_id  = "${data.aws_caller_identity.current.account_id}"
 
-resource "aws_iam_role" "iam" {
-  name = "${format("%s-%sLambdaRole", var.function_name, lower(var.environment))}"
+  vpc_enabled = "${length(var.vpc_cidr_block) > 0 && length(var.security_group_ids) == 0 && length(var.subnet_ids) == 0 ? 1 : 0}"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
+  security_group_ids = ["${coalescelist(var.security_group_ids, data.aws_security_group.lambda_security_groups.*.id)}"]
+  subnet_ids         = ["${coalescelist(var.subnet_ids, data.aws_subnet.lambda_subnets.*.id)}"]
+
+  commons = {
+    version = "${coalesce(var.version, "default")}"
+  }
 }
 
 resource "aws_lambda_function" "lambda" {
-  function_name    = "${format("%s-%s", var.function_name, lower(var.environment))}"
+  function_name    = "${format("%s", var.function_name)}"
   description      = "${var.description}"
   filename         = "${data.archive_file.lambda_archive.output_path}"
   source_code_hash = "${data.archive_file.lambda_archive.output_base64sha256}"
@@ -54,21 +35,22 @@ resource "aws_lambda_function" "lambda" {
   timeout          = "${var.timeout}"
   role             = "${aws_iam_role.iam.arn}"
 
+  vpc_config {
+    subnet_ids         = ["${local.subnet_ids}"]
+    security_group_ids = ["${local.security_group_ids}"]
+  }
+
   environment {
     variables = "${merge(var.variables, map(
-                     "ENVIRONMENT", lower(var.environment),
-                      "REGION", data.aws_region.current.name,
-                      "ACCOUNT_ID", data.aws_caller_identity.current.account_id))}"
+                      "REGION", local.region,
+                      "ACCOUNT_ID", local.account_id,
+                      "VERSION", local.commons["version"]))}"
   }
 
   tags = "${merge(var.tags, map(
-            "Environment", lower(var.environment)))}"
+            "version", local.commons["version"]))}"
 
   tracing_config {
     mode = "${var.tracing_mode}"
   }
-}
-
-output "qualified_arn" {
-  value = "${aws_lambda_function.lambda.qualified_arn}"
 }

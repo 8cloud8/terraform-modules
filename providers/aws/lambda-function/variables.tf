@@ -1,3 +1,9 @@
+variable "tags" {
+  default = {
+    tf = "true"
+  }
+}
+
 variable "function_name" {
   description = "A unique name for your Lambda Function"
 }
@@ -58,4 +64,22 @@ variable "source_file" {
 variable "type" {
   description = "The type of archive to generate. NOTE: zip is supported."
   default     = "zip"
+}
+
+variable "version" { default = "" }
+
+# http://docs.aws.amazon.com/lambda/latest/dg/vpc.html
+variable "vpc_cidr_block" {
+  description = "CIDR block of VPC, used to find the VPC id"
+  default = ""
+}
+
+variable "security_group_ids" {
+ type = "list"
+ default = []
+}
+
+variable "subnet_ids" {
+  type= "list"
+  default = []
 }
