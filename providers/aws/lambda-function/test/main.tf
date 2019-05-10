@@ -20,7 +20,7 @@ module "test_lambda" {
   version       = "0.0.1"
 
   # vpc testing
-  vpc_cidr_block  = "172.31.0.0/16"
+  #vpc_cidr_block  = "172.31.0.0/16"
 
   # or:
   # spec vpc directly //SubnetIds and SecurityIds must coexist or be both empty list//
@@ -28,6 +28,10 @@ module "test_lambda" {
   #subnet_ids = ["vpc-a15145c8"] # aws ec2 describe-subnets | grep SubnetId
 }
 
-output "print_cli_usage" {
+output "print_aws_cli_usage" {
   value = "aws lambda invoke --invocation-type RequestResponse --function-name ${local.function_name} --log-type Tail - | jq '.LogResult' -r | base64 --decode"
+}
+
+output "print_aws_cli_get_function" {
+  value = "aws lambda get-function --function-name ${local.function_name}"
 }
