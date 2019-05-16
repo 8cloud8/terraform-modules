@@ -6,22 +6,34 @@ provider "aws" {
   version = ">= 2.1.0"
 }
 
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
-data "aws_partition" "current" {}
+locals {
+  enabled = "${var.enabled == "true" ? 1 : 0}"
+}
+
+data "aws_caller_identity" "current" {
+  count = "${local.enabled}"
+}
+
+data "aws_region" "current" {
+  count = "${local.enabled}"
+}
+
+data "aws_partition" "current" {
+  count = "${local.enabled}"
+}
 
 output "account_id" {
-  value = "${data.aws_caller_identity.current.account_id}"
+  value = "${local.enabled > 0 ? join(",", data.aws_caller_identity.current.*.account_id) : ""}"
 }
 
 output "user_id" {
-  value = "${data.aws_caller_identity.current.user_id}"
+  value = "${local.enabled > 0 ? join(",", data.aws_caller_identity.current.*.user_id) : ""}"
 }
 
 output "region" {
-  value = "${data.aws_region.current.name}"
+  value = "${local.enabled > 0 ? join(",", data.aws_region.current.*.name) : ""}"
 }
 
 output "arn" {
-  value = "${data.aws_caller_identity.current.arn}"
+  value = "${local.enabled > 0 ? join(",", data.aws_caller_identity.current.*.arn) : ""}"
 }
