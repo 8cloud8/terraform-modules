@@ -11,11 +11,12 @@ provider "archive" {
 }
 
 locals {
-  region      = "${data.aws_region.current.name}"
-  account_id  = "${data.aws_caller_identity.current.account_id}"
+  region             = "${data.aws_region.current.name}"
+  account_id         = "${data.aws_caller_identity.current.account_id}"
 
-  vpc_enabled = "${length(var.vpc_cidr_block) > 0 && length(var.security_group_ids) == 0 && length(var.subnet_ids) == 0 ? 1 : 0}"
-
+  enabled            = "${var.enabled == "true" ? true : false}"
+  function_name      = "${format("%s", var.function_name)}"
+  vpc_enabled        = "${var.enabled == "true" && length(var.vpc_cidr_block) > 0 && length(var.security_group_ids) == 0 && length(var.subnet_ids) == 0 ? 1 : 0}"
   security_group_ids = ["${coalescelist(var.security_group_ids, data.aws_security_group.lambda_security_groups.*.id)}"]
   subnet_ids         = ["${coalescelist(var.subnet_ids, data.aws_subnet.lambda_subnets.*.id)}"]
 
@@ -25,7 +26,9 @@ locals {
 }
 
 resource "aws_lambda_function" "lambda" {
-  function_name    = "${format("%s", var.function_name)}"
+  count = "${local.enabled == "true" ? 1 : 0}"
+
+  function_name    = "${local.function_name}"
   description      = "${var.description}"
   filename         = "${data.archive_file.lambda_archive.output_path}"
   source_code_hash = "${data.archive_file.lambda_archive.output_base64sha256}"

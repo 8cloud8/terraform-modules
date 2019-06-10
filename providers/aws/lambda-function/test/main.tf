@@ -7,9 +7,9 @@ locals {
 }
 
 module "test_lambda" {
-  #source = "git::https://github.com/8cloud8/terraform-modules.git//providers/aws/lambda-function?ref=v0.0.3"
-  source = "../"
+  source = "git::https://github.com/8cloud8/terraform-modules.git//providers/aws/lambda-function?ref=main"
 
+  enabled       = "true"
   function_name = "${local.function_name}"
   description   = "${local.description}"
   handler       = "${local.handler}"
@@ -29,9 +29,9 @@ module "test_lambda" {
 }
 
 output "print_aws_cli_usage" {
-  value = "aws lambda invoke --invocation-type RequestResponse --function-name ${local.function_name} --log-type Tail - | jq '.LogResult' -r | base64 --decode"
+  value = "${module.test_lambda.print_aws_cli_usage}"
 }
 
 output "print_aws_cli_get_function" {
-  value = "aws lambda get-function --function-name ${local.function_name}"
+  value = "${module.test_lambda.print_aws_cli_get_function}"
 }

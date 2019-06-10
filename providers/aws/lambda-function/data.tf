@@ -2,6 +2,8 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 data "archive_file" "lambda_archive" {
+  count       = "${local.enabled == "true" ? 1 : 0}"
+
   type        = "${var.type}"
   source_file = "${var.source_file}"
   output_path = "/tmp/${var.function_name}.${var.type}"
