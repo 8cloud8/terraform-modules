@@ -1,0 +1,15 @@
+bucket = "foo-bar-sample-aaaaaa"
+
+extra_tags = {
+  "sample" = "true"
+}
+
+# TESTME:
+
+# Should be valid principals
+# allowed_ro_accounts_list = ["111111111", "222222222"]
+
+# `curl ifconfig.co`
+# source_ips = ["1.1.1.1"]
+
+# enforce_ssl_s3_policy = "true"
