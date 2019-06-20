@@ -20,7 +20,31 @@ variable "organisations_policy_description" {
 
 variable "organizations_policy_content" {
   description = "Default organisation policy content in JSON format"
-  default     = "{\"Version\": \"2012-10-17\", \"Statement\": { \"Effect\": \"Allow\", \"Action\": \"*\", \"Resource\": \"*\"}}"
+  default = <<-EOF
+  { "Version": "2012-10-17",
+    "Statement": [
+    {
+      "Sid": "DenyAllOutsideEU",
+      "Effect": "Deny",
+      "NotAction": [
+        "cloudfront:*",
+        "iam:*",
+	      "sts:*",
+        "route53:*",
+        "support:*"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringNotEquals": {
+          "aws:RequestedRegion": [
+            "eu-central-1",
+            "eu-west-1"
+          ]
+        }
+      }
+    }]
+  }
+  EOF
 }
 
 resource "aws_organizations_policy" "policy" {
