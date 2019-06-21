@@ -49,7 +49,7 @@ resource "aws_lambda_function" "lambda" {
     variables = "${merge(var.variables, map(
                       "REGION", local.region,
                       "ACCOUNT_ID", local.account_id,
-                      "GIT-COMMIT", local.commons["git-commit"]))}"
+                      "GIT_COMMIT", local.commons["git-commit"]))}"
   }
 
   tags = "${merge(var.tags,map(
