@@ -16,8 +16,8 @@ module "test_lambda" {
   runtime       = "${local.runtime}"
   source_file   = "${local.source_file}"
 
-  # optionals
-  version       = "0.0.1"
+  git-commit    = "6a39ba8"
+  git-branch    = "master"
 
   # vpc testing
   #vpc_cidr_block  = "172.31.0.0/16"
