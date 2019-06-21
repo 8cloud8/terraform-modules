@@ -21,7 +21,9 @@ locals {
   subnet_ids         = ["${coalescelist(var.subnet_ids, data.aws_subnet.lambda_subnets.*.id)}"]
 
   commons = {
-    version = "${coalesce(var.version, "default")}"
+    git-commit   = "${coalesce(var.git-commit, "unknown")}"
+    git-branch   = "${coalesce(var.git-branch, "unknown")}"
+    build-number = "${coalesce(var.build-number, "unknown")}"
   }
 }
 
@@ -47,11 +49,14 @@ resource "aws_lambda_function" "lambda" {
     variables = "${merge(var.variables, map(
                       "REGION", local.region,
                       "ACCOUNT_ID", local.account_id,
-                      "VERSION", local.commons["version"]))}"
+                      "GIT-COMMIT", local.commons["git-commit"]))}"
   }
 
-  tags = "${merge(var.tags, map(
-            "version", local.commons["version"]))}"
+  tags = "${merge(var.tags,map(
+                "created", timestamp(),
+                "build-number", local.commons["build-number"],
+                "git-branch",   local.commons["git-branch"],
+                "git-commit",   local.commons["git-commit"]))}"
 
   tracing_config {
     mode = "${var.tracing_mode}"
