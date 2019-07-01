@@ -1,4 +1,4 @@
-# terraform-ansible-ec2-web
+# terraform-ansible-debian-webserver
 
 This repository is the simple example of deploying and provisioning a web server on Amazon Web Services (AWS), using [Terraform](https://www.terraform.io/) and [Ansible](http://docs.ansible.com/ansible/). Based on:
 
@@ -8,7 +8,7 @@ This repository sets up:
 
 * A security group
 * An SSH key pair
-* A publicly-accessible EC2 instance (Ubuntu)
+* A publicly-accessible EC2 instance (Debian)
 * Within the instance:
    * Python
    * Nginx
@@ -33,10 +33,11 @@ pip install -r requirements.txt
 
 ```
 
-[More information about the AWS environment variables](https://www.terraform.io/docs/providers/aws/#environment-variables). If it is successful, you should see an `address` printed out at the end. Visit this in your browser, and the page should say "Welcome to nginx!"
+[More information about the AWS environment variables](https://www.terraform.io/docs/providers/aws/#environment-variables).
+If it is successful, you should see an `public_ip` printed out at the end.
 
 ## Cleanup
 
 ```sh
-terraform destroy
+make destroy
 ```

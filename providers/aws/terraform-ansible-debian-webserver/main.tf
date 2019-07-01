@@ -8,13 +8,16 @@ provider "aws" {
 
 locals {
   enabled            = "${var.enabled == "true" ? true : false}"
-  name               = "terraform-ansible-ec2-web"
+  name               = "tf-ansible-webserver"
 
   region             = "${data.aws_region.current.name}"
   account_id         = "${data.aws_caller_identity.current.account_id}"
+  external-cidr      = "${chomp(data.http.whats-my-ip.body)}/32"
   tags               = "${var.tags}"
 
-  commons = {
-    tf = "true"
-  }
+  vm_user            = "admin"
+  instance_type      = "t2.micro"
+  key_name           = "${local.name}"
+  public_key         = "${"~/.ssh/id_rsa.pub"}"
+  private_key        = "${"~/.ssh/id_rsa"}"
 }

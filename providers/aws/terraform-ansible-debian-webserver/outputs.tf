@@ -3,7 +3,7 @@ output "public_ip" {
 }
 
 output "ssh_instruction" {
-  description = "How to reach instance after deployment"
+  description = "How to access instance after deployment"
   value =<<-MSG
 
   eval `ssh-agent`
