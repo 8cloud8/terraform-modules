@@ -1,18 +1,11 @@
 terraform {
-  required_version = ">= 0.11.2"
-
-  #backend "local" {}
+  required_version = ">= 0.11.13"
 }
 
 locals {
-  environment = "${lookup(var.workspace_to_environment_map, terraform.workspace, "dev")}"
-  size        = "${local.environment == "dev" ? lookup(var.workspace_to_size_map, terraform.workspace, "small") : var.environment_to_size_map[local.environment]}"
+  environment = "${lookup(var.workspace_env_map, terraform.workspace, "dev")}"
 }
 
 output "env" {
   value = "${local.environment}"
-}
-
-output "size" {
-  value = "${local.size}"
 }
