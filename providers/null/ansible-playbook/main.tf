@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.11.11"
+  required_version = ">= 0.11.14"
 }
 
 variable "enabled" {
@@ -11,13 +11,13 @@ variable "playbook_file" {
 }
 
 locals {
-  enabled = "${var.enabled == "true" ? true : false}"
+  enabled       = "${var.enabled == "true" ? true : false}"
   playbook_file = "${var.playbook_file}"
-
+  
   ansible_playbook {
-    extra_vars = ""
     options    = "-v"
     connection = "local"
+    extra_vars = "terraform"
   }
 }
 
@@ -30,11 +30,13 @@ resource "null_resource" "ansible_playbook" {
 
   provisioner "local-exec" {
     command = <<-EOF
-    ANSIBLE_NOCOLOR=true PYTHONUNBUFFERED=1 ansible-playbook \
-    --connection=${local.ansible_playbook["connection"]} \
-    ${local.ansible_playbook["options"]} \
-    --extra-vars='${local.ansible_playbook["extra_vars"]}' \
-    ${local.playbook_file}
-  EOF
+      ansible-galaxy install -r requirements.yml
+
+      PYTHONUNBUFFERED=1 ansible-playbook -i localhost, \
+      --connection=${local.ansible_playbook["connection"]} \
+      --extra-vars='foo=${local.ansible_playbook["extra_vars"]}' \
+      ${local.ansible_playbook["options"]} \
+      ${local.playbook_file}
+    EOF
   }
 }

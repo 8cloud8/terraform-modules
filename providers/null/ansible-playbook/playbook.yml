@@ -1,7 +1,10 @@
-- name: Hello World Sample
+- name: Terraform + Ansible
   hosts: all
-  tasks:
-    - name: Hello Message
-      debug:
-        msg: "Hello World!"
+  gather_facts: false
+  vars:
+    foo: "{{foo}}"
 
+  tasks:
+    - name: Hello
+      debug:
+        msg: "Hello from {{foo}}"
