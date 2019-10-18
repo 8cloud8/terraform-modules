@@ -18,34 +18,11 @@ resource "digitalocean_droplet" "inlets" {
   # ssh_keys           = [12345678]       # Key example
   image = "ubuntu-18-04-x64"
 
-  region = "${var.do_ams3}"
-  size   = "1Gb"
-  name   = "${local.name}-${count.index}"
-
-  # user_data        = "${file("${path.module}/user_data.sh")}"
-
-  provisioner "remote-exec" {
-    inline = [
-      "export PATH=$PATH:/usr/bin",
-      "sudo apt-get update",
-      "sudo apt-get -y install curl",
-      "curl -sLS https://get.inlets.dev | sudo sh",
-      "curl -sLO https://raw.githubusercontent.com/inlets/inlets/master/hack/inlets.service",
-      "mv inlets.service /etc/systemd/system/inlets.service",
-      "echo AUTHTOKEN=$(head -c 16 /dev/urandom | shasum | cut -d\" \" -f1) > /etc/default/inlets &&",
-      "systemctl start inlets &&",
-      "systemctl enable inlet",
-    ]
-
-    connection {
-      type        = "ssh"
-      private_key = "${file("~/.ssh/id_rsa")}"
-      user        = "root"
-      timeout     = "2m"
-    }
-
-    #tags = ["by_terraform"]
-  }
+  region    = "${var.do_ams3}"
+  size      = "1Gb"
+  name      = "${local.name}-${count.index}"
+  user_data = "${file("${path.module}/userdata.sh")}"
+  tags      = ["by_terraform"]
 }
 
 locals {
