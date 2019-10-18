@@ -19,8 +19,8 @@ resource "digitalocean_droplet" "inlets" {
   image = "ubuntu-18-04-x64"
 
   region = "${var.do_ams3}"
-  size   = "1"
-  name   = "${local.name}-%d-${count.index}"
+  size   = "1Gb"
+  name   = "${local.name}-${count.index}"
 
   # user_data        = "${file("${path.module}/user_data.sh")}"
 

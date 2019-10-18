@@ -4,7 +4,7 @@ terraform {
 
 locals {
   enabled = "${var.enabled == "true" ? true : false}"
-  name    = "mywebserver-ex"
+  name    = "mywebserver"
 }
 
 provider "digitalocean" {
@@ -22,7 +22,7 @@ resource "digitalocean_droplet" "mywebserver" {
   private_networking = true
   backups            = true
   ipv6               = true
-  name               = "${local.name}"
+  name               = "${local.name}-${count.index}"
 
   provisioner "remote-exec" {
     inline = [
@@ -53,4 +53,3 @@ resource "digitalocean_record" "mywebserver" {
   value  = "${digitalocean_droplet.mywebserver.ipv4_address}"
 }
 */
-
