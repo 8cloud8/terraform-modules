@@ -44,7 +44,7 @@ resource "digitalocean_droplet" "inlets" {
       timeout     = "2m"
     }
 
-    tags = ["by_terraform"]
+    #tags = ["by_terraform"]
   }
 }
 
