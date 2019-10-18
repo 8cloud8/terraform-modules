@@ -15,11 +15,11 @@ resource "digitalocean_droplet" "inlets" {
   count = "${local.enabled == "true" ? 1 : 0}"
 
   # Obtain your ssh_key id number via your account. See Document https://developers.digitalocean.com/documentation/v2/#list-all-keys
-  # ssh_keys           = [12345678]       # Key example
+  # ssh_keys           = [25624561]       # Key example
   image = "ubuntu-18-04-x64"
 
   region    = "${var.do_ams3}"
-  size      = "1Gb"
+  size      = "s-1vcpu-1gb"
   name      = "${local.name}-${count.index}"
   user_data = "${file("${path.module}/userdata.sh")}"
   tags      = ["by_terraform"]
