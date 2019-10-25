@@ -8,8 +8,6 @@ variable "ssh_keys" {
   type        = list(string)
 }
 
-variable "do_token" {}
-
 # Current Available Datacenter Regions
 
 # As of 28-05-2017

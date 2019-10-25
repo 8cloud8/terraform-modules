@@ -5,7 +5,7 @@ locals {
   size        = "s-1vcpu-1gb"
   image       = var.ubuntu
   use_domain  = false
-  domain_name = "app.foo.inlets.dev"
+  domain_name = var.domain_name
   record_name = "inlets"
 }
 
@@ -30,6 +30,8 @@ locals {
   ipv4_address = element(digitalocean_droplet.inlets.*.ipv4_address, 0)
 }
 
+variable "domain_name" {}
+
 resource "digitalocean_domain" "inlets" {
   count      = local.enabled == true && local.use_domain == true ? 1 : 0
   name       = local.domain_name
@@ -41,6 +43,5 @@ resource "digitalocean_record" "inlets" {
   domain = "${digitalocean_domain.inlets[count.index].name}"
   type   = "A"
   name   = local.record_name
-  #  value  = "${digitalocean_droplet.inlets.*.ipv4_address}"
-  value = local.ipv4_address
+  value  = local.ipv4_address
 }

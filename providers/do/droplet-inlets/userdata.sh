@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# Enables randomly generated authentication token by default.
-# Change the value here if you desire a specific token value.
-
-# apt-get update && apt-et dist-upgrade -yy
+apt-get update && apt-et dist-upgrade -yy
 
 export INLETSTOKEN=$(head -c 16 /dev/urandom | shasum | cut -d" " -f1)
 
