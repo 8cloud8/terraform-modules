@@ -1,44 +1,46 @@
-terraform {
-  required_version = ">= 0.11.14"
-}
-
 locals {
-  enabled = "${var.enabled == "true" ? true : false}"
-  name    = "inlets"
+  enabled     = var.enabled == "true" ? true : false
+  name        = "inlets"
+  ssh_keys    = var.ssh_keys
+  size        = "s-1vcpu-1gb"
+  image       = var.ubuntu
+  use_domain  = false
+  domain_name = "app.foo.inlets.dev"
+  record_name = "inlets"
 }
 
 provider "digitalocean" {
-  # You need to set this in your .bashrc  # export DIGITALOCEAN_TOKEN="Your API TOKEN"  #
+  # export DIGITALOCEAN_TOKEN="Your API TOKEN"  #
 }
 
 resource "digitalocean_droplet" "inlets" {
-  count = "${local.enabled == "true" ? 1 : 0}"
+  count = local.enabled == true ? 1 : 0
 
-  # Obtain your ssh_key id number via your account. See Document https://developers.digitalocean.com/documentation/v2/#list-all-keys
-  # ssh_keys           = [25624561]       # Key example
-  image = "ubuntu-18-04-x64"
+  ssh_keys = local.ssh_keys
+  image    = local.image
 
-  region    = "${var.do_ams3}"
-  size      = "s-1vcpu-1gb"
-  name      = "${local.name}-${count.index}"
-  user_data = "${file("${path.module}/userdata.sh")}"
+  region    = var.do_ams3
+  size      = local.size
+  name      = format("%s-%d", local.name, count.index)
+  user_data = file("${path.module}/userdata.sh")
   tags      = ["by_terraform"]
 }
 
 locals {
-  ipv4_address = "${element(digitalocean_droplet.inlets.*.ipv4_address, 0)}"
+  ipv4_address = element(digitalocean_droplet.inlets.*.ipv4_address, 0)
 }
 
-/*
 resource "digitalocean_domain" "inlets" {
-  name       = "www.inlets.com"
-  ip_address = "${local.ipv4_address}"
+  count      = local.enabled == true && local.use_domain == true ? 1 : 0
+  name       = local.domain_name
+  ip_address = local.ipv4_address
 }
 
 resource "digitalocean_record" "inlets" {
-  domain = "${digitalocean_domain.inlets.name}"
+  count  = local.enabled == true && local.use_domain == true ? 1 : 0
+  domain = "${digitalocean_domain.inlets[count.index].name}"
   type   = "A"
-  name   = "inlets"
-  value  = "${local.ipv4_address}"
+  name   = local.record_name
+  #  value  = "${digitalocean_droplet.inlets.*.ipv4_address}"
+  value = local.ipv4_address
 }
-*/

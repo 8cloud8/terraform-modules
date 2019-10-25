@@ -1,10 +1,14 @@
-# ####
-
 variable "enabled" {
   description = "Set to false to prevent the module from creating any resources"
   default     = "true"
 }
 
+variable "ssh_keys" {
+  description = "Obtain your ssh_key id number via your accounti: https://developers.digitalocean.com/documentation/v2/#list-all-key"
+  type        = list(string)
+}
+
+variable "do_token" {}
 
 # Current Available Datacenter Regions
 
@@ -71,7 +75,7 @@ variable "do_tor1" {
 
 variable "ubuntu" {
   description = "Default LTS"
-  default     = "ubuntu-16-04-x64"
+  default     = "ubuntu-18-04-x64"
 }
 
 variable "centos" {
