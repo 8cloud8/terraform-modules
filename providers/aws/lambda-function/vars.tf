@@ -72,8 +72,6 @@ variable "type" {
   default     = "zip"
 }
 
-variable "version" { default = "" }
-
 # http://docs.aws.amazon.com/lambda/latest/dg/vpc.html
 variable "vpc_cidr_block" {
   description = "CIDR block of VPC, used to find the VPC id"
