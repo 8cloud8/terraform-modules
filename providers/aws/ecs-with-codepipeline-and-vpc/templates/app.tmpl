@@ -1,0 +1,26 @@
+[
+  {
+    "name": "${service_name}",
+    "image": "${image_name}",
+    "memoryReservation": ${memoryReservation},
+    "memory": ${memory},
+    "cpu": 100,
+    "portMappings": [
+      {
+        "hostPort": 0,
+        "protocol": "tcp",
+        "containerPort": ${container_port}
+      }
+    ],
+    "environment": [
+      {
+        "name": "PORT",
+        "value": "${container_port}"
+      },
+      {
+        "name": "APP_NAME",
+        "value": "${service_name}"
+      }
+    ]
+  }
+]
