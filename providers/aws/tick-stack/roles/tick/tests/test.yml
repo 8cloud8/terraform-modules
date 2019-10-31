@@ -1,0 +1,16 @@
+---
+- hosts: all
+  vars:
+    remote_user: test
+
+  pre_tasks:
+    - name: Docker-py is present
+      pip: name=docker-py state=present
+
+    - name: Ensure test users created
+      user:
+        name: "{{ remote_user }}"
+
+  roles:
+    - geerlingguy.docker
+    - role_under_test

@@ -1,0 +1,17 @@
+---
+- name: Setup TICK Stack
+  hosts: all
+  gather_facts: false
+  remote_user: "{{remote_user}}"
+  become: yes
+  become_method: sudo
+
+  vars:
+    ansible_ssh_private_key_file: "{{ key }}"
+
+  pre_tasks:
+    - name: Docker-py is present
+      pip: name=docker-py state=present
+
+  roles:
+    - tick
