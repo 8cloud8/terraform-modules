@@ -2,7 +2,7 @@
 - name: Setup TICK Stack
   hosts: all
   gather_facts: false
-  remote_user: "{{remote_user}}"
+  remote_user: "{{user}}"
   become: yes
   become_method: sudo
 
