@@ -1,5 +1,5 @@
 ---
 key: ~/.ssh/my-aws-key.pub
 user: ubuntu
-# hack geerlingguy.docker 
+# hack geerlingguy.docker
 ansible_service_mgr: systemd
