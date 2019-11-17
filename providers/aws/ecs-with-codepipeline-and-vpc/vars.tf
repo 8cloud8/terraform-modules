@@ -4,7 +4,8 @@ variable "tags" {
   }
 }
 
-variable "image_name" {}
+variable "image_name" {
+}
 
 variable "ecs_key_pair_name" {
   default = ""

@@ -86,4 +86,6 @@ resource "aws_security_group" "ecs" {
     to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = "${merge(var.tags, map("Name", format("%s-%s", var.service_name, "ecs")))}"
 }

@@ -1,0 +1,11 @@
+service_name = "flask-app"
+image_name   = "xomodo/flask-app:latest"
+
+github_token  = "your_github_token"
+github_owner  = "atrakic"
+github_repo   = "flask-app"
+
+# ECS ASG
+max_size         = 2
+min_size         = 1
+desired_capacity = 1

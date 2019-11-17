@@ -3,7 +3,7 @@ locals {
   github_owner  = var.github_owner
   github_repo   = var.github_repo
   github_branch = var.github_branch
-  bucket = "${var.service_name}-codepipeline-bucket"
+  bucket        = "${var.service_name}-codepipeline-bucket"
 }
 
 resource "aws_s3_bucket" "pipeline" {
@@ -42,7 +42,7 @@ resource "aws_s3_bucket" "pipeline" {
     ]
 }
 POLICY
-  tags = "${merge(var.tags, map("Name", format("%s-%s", var.service_name, "pipeline")))}"
+  tags   = "${merge(var.tags, map("Name", format("%s-%s", var.service_name, "pipeline")))}"
 }
 
 data "aws_iam_policy_document" "assume_by_pipeline" {

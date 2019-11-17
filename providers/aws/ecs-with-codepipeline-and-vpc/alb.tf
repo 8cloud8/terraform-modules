@@ -1,5 +1,6 @@
 locals {
   target_groups = ["primary", "secondary"]
+  hosts_name    = ["${var.service_name}.*.terraform.io"]
 }
 
 resource "aws_security_group" "alb" {
@@ -70,10 +71,6 @@ resource "aws_lb_listener" "this" {
 #output "lb_dns_name" {
 #  value = "${aws_lb_listener.this.dns_name}"
 #}
-
-locals {
-  hosts_name    = ["${var.service_name}.*.terraform.io"]
-}
 
 resource "aws_lb_listener_rule" "this" {
   count        = "${length(local.target_groups)}"

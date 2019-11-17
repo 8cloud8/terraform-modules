@@ -1,3 +1,8 @@
+resource "aws_iam_role" "ecr" {
+  name               = "${var.service_name}-ECR-ReadForECSServiceAccount"
+  assume_role_policy = "${data.aws_iam_policy_document.assume_ecr.json}"
+}
+
 data "aws_iam_policy_document" "assume_ecr" {
   statement {
     sid     = ""
@@ -11,13 +16,8 @@ data "aws_iam_policy_document" "assume_ecr" {
   }
 }
 
-resource "aws_iam_role" "ecr" {
-  name               = "${var.service_name}-ECR-ReadForECSServiceAccount"
-  assume_role_policy = "${data.aws_iam_policy_document.assume_ecr.json}"
-}
-
 resource "aws_ecr_repository" "this" {
-  name  = "${var.service_name}"
+  name = "${var.service_name}"
 }
 
 resource "aws_ecr_repository_policy" "this" {

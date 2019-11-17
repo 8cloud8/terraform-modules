@@ -1,8 +1,9 @@
 locals {
-  image_name = var.image_name
-
   #image_version = "latest"
   #image_name = format("%s/%s:%s", var.github_owner, var.github_repo, local.image_version)
+
+  image_name = var.image_name
+  memory     = 128
 }
 
 resource "aws_ecs_task_definition" "this" {
@@ -11,14 +12,16 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn            = "${aws_iam_role.task_role.arn}"
   network_mode             = "bridge"
   requires_compatibilities = ["EC2"]
+
   container_definitions = templatefile("${path.module}/templates/app.tmpl",
-    { service_name       = "${var.service_name}",
-      image_name         = "${local.image_name}",
-      container_port     = var.container_port,
-      memory             = 128,
-      memoryReservation  = var.memory_reservation
+    { service_name      = "${var.service_name}",
+      image_name        = "${local.image_name}",
+      container_port    = var.container_port,
+      memory            = local.memory,
+      memoryReservation = var.memory_reservation
     }
   )
+
   tags = "${merge(var.tags, map("Name", format("%s-%s", var.service_name, "ecs-task")))}"
 }
 
