@@ -30,7 +30,7 @@ resource "aws_launch_configuration" "this" {
 
   root_block_device {
     volume_type           = "gp2"
-    volume_size           = 35     # at least > 30GB
+    volume_size           = 35 # at least > 30GB
     delete_on_termination = true
   }
 
@@ -82,6 +82,11 @@ resource "aws_iam_role" "ecs-instance-role" {
 resource "aws_iam_role_policy_attachment" "ecs-instance-role-attachment" {
   role       = "${aws_iam_role.ecs-instance-role.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_iam_role_policy_attachment" "codedeploy-role-attachment" {
+  role       = "${aws_iam_role.ecs-instance-role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
 }
 
 resource "aws_iam_instance_profile" "ecs-instance-profile" {
