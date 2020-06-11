@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+
+TERRAFORM_VERSION="${TERRAFORM_VERSION:-light}"
+
+docker run -i --rm \
+  --log-driver none \
+  -e SSH_AUTH_SOCK \
+  -e TF_CLI_ARGS \
+  -e TF_CLI_CONFIG_FILE \
+  -e TF_INPUT \
+  -e TF_REGISTRY_CLIENT_TIMEOUT \
+  -e TF_LOG \
+  -e TF_LOG_PATH \
+  -e TF_IN_AUTOMATION \
+  -e TF_DATA_DIR \
+  -e TF_VAR_environment="${TF_WORKSPACE}" \
+  -e AWS_ACCESS_KEY_ID \
+  -e AWS_SECRET_ACCESS_KEY \
+  -e AWS_DEFAULT_REGION \
+  -v "${TF_PLUGIN_CACHE_DIR:-/tmp/.terraform.d/plugin-cache}":/.terraform.d/plugin-cache \
+  -e TF_PLUGIN_CACHE_DIR=/.terraform.d/plugin-cache \
+  -v "$PWD":/app/ -w /app/ \
+  hashicorp/terraform:"${TERRAFORM_VERSION}" "$@"
