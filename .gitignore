@@ -1,0 +1,20 @@
+#  Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
+*.auto.tfvars
+
+*.tfplan
+
+# direnv
+**/.direnv/*
+
+*.venv/*
+
+# no creds
+*.pem
